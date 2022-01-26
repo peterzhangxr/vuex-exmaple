@@ -1,28 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    通过$store获取state: {{ $store.state.count }}
+    通过mapState获取state: {{ count }}
+    <button @click="$store.commit('increment')">+</button>
+    <button @click="increment">mapMutations+</button>
+    <button @click="dispatchIncrement">dispatchIncrement+</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex"
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  computed: {
+    ...mapState([ 'count' ]),
+    ...mapGetters([ 'doneTodos' ])
+  },
+  mounted () {
+    console.log(this.count)
+    console.log(this.doneTodos)
+  },
+  methods: {
+    ...mapMutations(['increment']),
+    ...mapActions({
+      add: 'increment'
+    }),
+    dispatchIncrement () {
+      this.$store.dispatch('increment')
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
